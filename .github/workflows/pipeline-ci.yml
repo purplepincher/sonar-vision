@@ -43,7 +43,7 @@ jobs:
       - name: Install
         run: |
           cd sonar-vision/packages/pipeline
-          pip install -e ".[dev]" >/dev/null 2>&1
+          pip install -e ".[dev]"
       - name: Import check
         run: |
           cd sonar-vision/packages/pipeline
