@@ -52,18 +52,18 @@ jobs:
         run: |
           cd sonar-vision/packages/pipeline
           python -c "
-import sys; sys.path.insert(0,'.')
-from sim_pipeline import *
-p = compute_physics(15.0, chl=4.0, season='summer', sediment='sand')
-assert abs(p['temperature'] - 22.0) < 0.5, 'thermocline mismatch'
-rt = SonarRayTracer(); ret = rt.compute_return(10.0, 50.0, 100.0)
-assert 0.13 < ret['total_travel_time_s'] < 0.15, 'travel time out of range'
-m = MissionPlanner().lawnmower('t', 500, 200, 25)
-assert len(m.waypoints) == 8, 'lawnmower wp count'
-sim = AUVFleetSimulator(FluxPhysics()); sim.spawn_fleet(3); sim.run_for(10)
-assert sim.fleet_summary()['count'] == 3
-print('ALL TESTS PASSED (py${{ matrix.python }})')
-"
+          import sys; sys.path.insert(0,'.')
+          from sim_pipeline import *
+          p = compute_physics(15.0, chl=4.0, season='summer', sediment='sand')
+          assert abs(p['temperature'] - 22.0) < 0.5, 'thermocline mismatch'
+          rt = SonarRayTracer(); ret = rt.compute_return(10.0, 50.0, 100.0)
+          assert 0.13 < ret['total_travel_time_s'] < 0.15, 'travel time out of range'
+          m = MissionPlanner().lawnmower('t', 500, 200, 25)
+          assert len(m.waypoints) == 8, 'lawnmower wp count'
+          sim = AUVFleetSimulator(FluxPhysics()); sim.spawn_fleet(3); sim.run_for(10)
+          assert sim.fleet_summary()['count'] == 3
+          print('ALL TESTS PASSED (py${{ matrix.python }})')
+          "
 
   build:
     name: Build wheels
