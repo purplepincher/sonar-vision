@@ -1,3 +1,7 @@
+# Sonar Vision
+
+> **📚 Documentation:** [`PLUG_AND_PLAY.md`](./PLUG_AND_PLAY.md) · [`GETTING_STARTED.md`](./GETTING_STARTED.md) · [`ARCHITECTURE.md`](./ARCHITECTURE.md) · [`API_REFERENCE.md`](./API_REFERENCE.md) · [`LOW_LEVEL.md`](./LOW_LEVEL.md)
+
 # @superinstance/sonar-vision-tool
 
 [![npm version](https://img.shields.io/npm/v/@superinstance/sonar-vision-tool.svg?style=flat-square)](https://www.npmjs.com/package/@superinstance/sonar-vision-tool)
