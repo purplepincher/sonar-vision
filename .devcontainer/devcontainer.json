@@ -1,0 +1,39 @@
+{
+    "name": "Sonar Vision Development",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:20-bullseye",
+    "features": {
+        "ghcr.io/devcontainers/features/github-cli:1": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.11"
+        }
+    },
+    "remoteEnv": {
+        "AGENT_NAME": "sonar-vision-agent",
+        "AGENT_ROLE": "sonar-analysis-worker",
+        "DEEPINFRA_API_URL": "https://api.deepinfra.com/v1",
+        "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
+        "DEEPINFRA_API_KEY": "${localEnv:DEEPINFRA_API_KEY}",
+        "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "github.vscode-pull-request-github",
+                "ms-python.python",
+                "ms-toolsai.jupyter"
+            ],
+            "settings": {
+                "editor.formatOnSave": true,
+                "editor.defaultFormatter": "esbenp.prettier-vscode",
+                "python.defaultInterpreterPath": "/usr/local/bin/python"
+            }
+        }
+    },
+    "postCreateCommand": "npm install && pip install -r requirements.txt 2>/dev/null || true",
+    "remoteUser": "node",
+    "containerUser": "node"
+}
