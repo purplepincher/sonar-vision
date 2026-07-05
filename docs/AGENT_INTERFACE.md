@@ -100,5 +100,5 @@ python -m pytest tests/           # Python tests
 This repo includes a `.devcontainer/` with Node.js + Python pre-installed.
 
 ```bash
-gh codespace create --repo SuperInstance/sonar-vision
+gh codespace create --repo purplepincher/sonar-vision
 ```

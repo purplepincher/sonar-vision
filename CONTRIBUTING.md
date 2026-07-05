@@ -1,46 +1,44 @@
 # Contributing — sonar-vision
 
-> *Thank you for contributing to the SuperInstance fleet.*
+> *Thank you for contributing to sonar-vision.*
 
 ## How to Contribute
 
-### 1. Understand the Ternary Ethos
-
-We use {-1, 0, +1} because it is the minimum viable alphabet for expressing agreement,
-disagreement, and abstention. **0 is not "nothing"** — it is a deliberate neutral state.
-
-### 2. Set Up Your Environment
+### 1. Set Up Your Environment
 
 ```bash
-git clone https://github.com/SuperInstance/sonar-vision.git
+git clone https://github.com/purplepincher/sonar-vision.git
 cd sonar-vision
-cargo build
-cargo test
+pip install -e ".[dev]"
+```
+
+### 2. Run the Tests
+
+```bash
+pytest tests/
 ```
 
 ### 3. Find Something to Work On
 
-- Check the [issues page](https://github.com/SuperInstance/sonar-vision/issues)
+- Check the [issues page](https://github.com/purplepincher/sonar-vision/issues)
 - Look for `good first issue` labels
 - Read the `ARCHITECTURE.md` and `GETTING_STARTED.md` for context
 
 ### 4. Code Standards
 
-- **No unsafe code** unless absolutely necessary and reviewed
-- **Ternary-compatible** — prefer {-1, 0, +1} semantics where domain-appropriate
 - **Test coverage** — every public function needs at least one test
 - **Documentation** — all public items must have doc comments
-- **Error handling** — use `Result` for fallible operations; `FluxError` pattern preferred
+- **Error handling** — raise clear, specific exceptions for fallible operations
 
 ### 5. Commit Messages
 
 Follow the [Conventional Commits](https://www.conventionalcommits.org/) spec:
 
 ```
-feat: add ternary quantization for weight matrices
-fix: handle zero-input edge case in softmax
+feat: add configurable absorption model
+fix: handle zero-distance edge case in ping()
 docs: update architecture overview for v0.3
-test: add roundtrip tests for pack/unpack
+test: add roundtrip tests for grid serialization
 ```
 
 ### 6. Pull Request Process
@@ -48,9 +46,8 @@ test: add roundtrip tests for pack/unpack
 1. Fork the repository
 2. Create a feature branch
 3. Write tests for your changes
-4. Ensure all tests pass: `cargo test`
-5. Run clippy: `cargo clippy -- -D warnings`
-6. Submit a PR with a clear description of the change
+4. Ensure all tests pass: `pytest tests/`
+5. Submit a PR with a clear description of the change
 
 ### 7. Review Process
 
@@ -60,8 +57,8 @@ test: add roundtrip tests for pack/unpack
 
 ## Code of Conduct
 
-Be respectful. We're building something complex together. Assume good intent.
+Be respectful. We're building something useful together. Assume good intent.
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under MIT OR Apache-2.0.
+By contributing, you agree that your contributions will be licensed under MIT.

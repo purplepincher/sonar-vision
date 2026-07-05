@@ -1,14 +1,13 @@
-# sonar-vision — SuperInstance Fleet Repo
+# sonar-vision
 
-This repo is part of the [SuperInstance](https://github.com/SuperInstance) fleet.
-It follows the [baton-system](https://github.com/SuperInstance/baton-system) I2I protocol
-for agent coordination.
-
+This repo is a pure-Python sonar simulation, tracking, and spatial mapping toolkit.
+It is hosted under [purplepincher](https://github.com/purplepincher) and stands on
+its own merit — no sketchbook narrative or external protocol is required to use or
+understand it.
 
 ## Garbage Collection
 
-This repo follows the fleet GC protocol defined in:
-- [baton-system/docs/GC_AGENTS.md](https://github.com/SuperInstance/baton-system/blob/main/docs/GC_AGENTS.md)
-- [baton-system/docs/gc-intelligent-README.md](https://github.com/SuperInstance/baton-system/blob/main/docs/gc-intelligent-README.md)
+This repo follows the GC settings in `.gcconfig` in the repo root.
 
-This repo's tier is **warm**. See `.gcconfig` in repo root for detailed settings.
+- Repo tier: **warm**
+- Immortal files/directories: `.git`, `.env`, `AGENTS.md`

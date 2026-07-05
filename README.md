@@ -115,7 +115,10 @@ See [`API_REFERENCE.md`](./API_REFERENCE.md) for the full API.
 
 ## How It Fits
 
-Sonar Vision is part of the [SuperInstance fleet](https://github.com/SuperInstance) ecosystem.
+Sonar Vision is hosted under [purplepincher](https://github.com/purplepincher) as a
+standalone toolkit. It is real, tested Python for sonar ping/echo simulation,
+tracking, and spatial mapping — no part of it is required by, or explains, any
+other repo there; it stands on its own merit, not as part of an invented story.
 
 ---
 
@@ -130,4 +133,4 @@ pytest tests/
 
 ## License
 
-MIT © SuperInstance Labs — see [`LICENSE`](./LICENSE).
+MIT. See [`LICENSE`](./LICENSE).
