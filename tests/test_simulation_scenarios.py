@@ -209,13 +209,13 @@ class TestCrossingTargets:
             SimTarget("crosser_2", 80.0, 10.0, -1.2, -0.5),  # bearing ~7°
         ]
 
-    def test_crossing_targets_remain_two_tracks(self) -> None:
-        _, tracker, _ = run_scenario(self.targets())
+    def test_crossing_targets_remain_two_tracks(self, targets: list[SimTarget]) -> None:
+        _, tracker, _ = run_scenario(targets)
         active = tracker.active_tracks(now=N_STEPS * DT)
         assert len(active) == 2, f"Expected 2 tracks after crossing, got {len(active)}"
 
-    def test_crossing_tracks_have_opposing_velocity_signs(self) -> None:
-        _, tracker, _ = run_scenario(self.targets())
+    def test_crossing_tracks_have_opposing_velocity_signs(self, targets: list[SimTarget]) -> None:
+        _, tracker, _ = run_scenario(targets)
         tracks = tracker.active_tracks(now=N_STEPS * DT)
         vx_values = [t.vx for t in tracks]
         assert any(vx > 0 for vx in vx_values), "Missing +x moving track"
