@@ -165,7 +165,7 @@ See [`API_REFERENCE.md`](./API_REFERENCE.md) for the full API.
 pytest tests/
 ```
 
-Most tests pass; two scenario tests currently fail because a fixture is called directly rather than injected.
+The suite covers unit tests (`tests/test_all.py`) and end-to-end simulation scenarios (`tests/test_simulation_scenarios.py`); all pass under Python 3.10+.
 
 ## License
 
