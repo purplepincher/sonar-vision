@@ -26,8 +26,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install mypy ruff tomli >/dev/null
-      - run: ruff check sonar-vision/packages/pipeline/ --no-fix || true
-      - run: mypy sonar-vision/packages/pipeline/ --ignore-missing-imports || true
+      - run: ruff check sonar-vision/packages/pipeline/ --no-fix
+      - run: mypy sonar-vision/packages/pipeline/ --ignore-missing-imports
 
   test:
     name: Test py${{ matrix.python }}

@@ -1,5 +1,4 @@
 """Sonar vision simulation pipeline."""
-import math
 from typing import Any
 
 
