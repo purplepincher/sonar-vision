@@ -26,7 +26,7 @@ Ping (emit) ──▶ Propagation (spreading + absorption loss)
 ## Core Components
 
 ### Signal (`signal.py`)
-Discrete-time signal with uniform sampling. Construction methods: `sine`, `chirp`, `noise`. Filters: lowpass, highpass. Utility: FFT, energy, envelope.
+Discrete-time signal with uniform sampling. Construction methods: `sine`, `chirp`, `noise`. Filters: lowpass, highpass, bandpass, threshold, envelope. Analysis: rms, peak, energy, snr_db, dominant_frequency (zero-crossing), dft_magnitude (naïve O(N²) DFT — not an FFT).
 
 ### Sonar (`sonar.py`)
 Active sonar model. Configurable: sound speed, frequency, pulse duration, max range, beam width, source level, noise level. Methods: `ping(distance)`, `ping_return_signal()`, `round_trip_time()`, `spreading_loss()`, `absorption_loss()`, `total_loss()`, `in_beam()`, `beam_coverage()`.
@@ -51,7 +51,7 @@ generate_ping() → sound travels → echo returns
 ## Key Design Decisions
 
 ### Constant-Velocity Tracker
-Simple but effective. Each track has (x, y, vx, vy). Prediction: x += vx * dt. Gating: new detections within Mahalanobis-like distance are associated.
+Simple but effective. Each track has (x, y, vx, vy). Prediction: x += vx * dt. Gating: new detections within **Euclidean** distance of the predicted position (not Mahalanobis — there is no covariance matrix) are associated; the nearest unassociated detection wins.
 
 ### Pure Python
 No numpy, no scipy. Keeps it zero-dependency. Signal processing is educational-grade.

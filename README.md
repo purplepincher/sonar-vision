@@ -106,6 +106,10 @@ Coverage: 1.00%
 - **`Signal`** provides discrete-time signal primitives: sine, noise, chirp, resampling, moving-average lowpass/highpass/bandpass filtering, thresholding, envelope, RMS/peak/energy metrics, and a naïve DFT magnitude.
 - **`ObjectTracker`** uses greedy nearest-neighbour association with a constant-velocity prediction gate. Each track stores position and exponentially smoothed velocity; tracks time out after a configurable interval without updates.
 - **`SpatialMap`** maintains a 2-D occupancy grid centred at the origin. Obstacles mark cells as occupied, free-space rays can mark cells as free, and ray casting returns the first occupied cell along a bearing.
+- **`SonarDisplay`** renders ASCII visualisations: a polar radar sweep from
+  bearing/distance readings, an occupancy-map downsample, and a tracker
+  overlay showing active tracks and velocity vectors. No graphics
+  dependencies — output is a plain string of characters.
 
 ## Configuration and options
 
@@ -149,6 +153,19 @@ SpatialMap(
 
 Key methods: `add_obstacle(Obstacle(...))`, `get_cell(x, y)`, `set_cell(x, y, state)`, `ray_cast(ox, oy, angle_deg, max_dist)`, `mark_free_ray(...)`, `occupancy_count()`, `coverage()`.
 
+### `SonarDisplay`
+
+```python
+SonarDisplay(
+    width=41,      # characters
+    height=21,     # characters
+    range_m=50.0,  # meters represented by display radius
+)
+```
+
+Key methods: `render_sweep(bearing_angles, distances, max_range=None)`,
+`render_map(spatial_map)`, `render_tracks(tracker, cx_m=0, cy_m=0, now=None)`.
+
 See [`API_REFERENCE.md`](./API_REFERENCE.md) for the full API.
 
 ## Limitations
@@ -157,7 +174,51 @@ See [`API_REFERENCE.md`](./API_REFERENCE.md) for the full API.
 - **Single-beam sonar.** No beamforming, phased arrays, or multi-beam reconstruction.
 - **Simplified acoustics.** Propagation uses geometric spreading plus a constant dB/km absorption term; it is not a full ocean-acoustics solver.
 - **No image or video processing.** The toolkit works with 1-D signals and 2-D positions, not camera frames.
-- **Not on PyPI.** Install from source for now.
+
+## Capability verification
+
+Every claim below was traced to working code and/or a passing test (86 tests,
+all green under `pytest tests/`). Markers follow this org's convention:
+
+- ✅ **real today** — traced to working code
+- ⚠️ **real but conditional** — works, but needs something external or has caveats
+- 🔮 **aspirational / later phase** — described as a direction, not implemented
+
+### ✅ Real today
+
+| Capability | Where in code |
+|------------|---------------|
+| Active sonar ping/echo simulation with two-way propagation loss | `sonar.py::ping`, `ping_return_signal` |
+| Configurable sound speed, frequency, beam width, source/noise level | `sonar.py::Sonar` dataclass fields |
+| Distance jitter proportional to range (stochastic estimate) | `sonar.py::ping` — `rng.gauss(0, 0.005 * distance)` |
+| Signal primitives: sine, noise, chirp, resample | `signal.py::Signal` classmethods |
+| Filters: lowpass, highpass, bandpass, threshold, envelope | `signal.py::Signal` — all tested in `TestSignalProcessing` |
+| Analysis: rms, peak, energy, snr_db, dominant_frequency, dft_magnitude | `signal.py::Signal` — tested in `TestSignalAnalysis` |
+| Signal arithmetic: `+` and `*` (scalar or signal) | `signal.py::Signal.__add__`, `__mul__` |
+| Multi-object tracking: greedy nearest-neighbour association | `tracker.py::ObjectTracker.update` |
+| Constant-velocity prediction with exponential smoothing (α=0.5) | `tracker.py::ObjectTracker._update_track` |
+| Track lifecycle: active/lost/prune, predict, speed, heading | `tracker.py::ObjectTracker` — tested in `TestObjectTracker` |
+| 2-D occupancy grid: obstacles, free-space rays, ray casting | `map.py::SpatialMap` — tested in `TestSpatialMap` |
+| ASCII visualisation: radar sweep, map render, track overlay | `display.py::SonarDisplay` — tested in `TestSonarDisplay` |
+| End-to-end pipeline: sonar → detect → track → map | `tests/test_simulation_scenarios.py` — 10 scenario tests |
+
+### ⚠️ Real but conditional
+
+| Capability | Condition |
+|------------|-----------|
+| DFT magnitude spectrum | ✅ Real, but it's a **naïve O(N²) implementation** — fine for educational use with small signals (≤ a few hundred samples), impractical for long signals. Not an FFT. |
+| Dominant frequency estimate | ✅ Real, but uses **zero-crossing counting**, not a spectral peak. Approximate — the test allows ±30 Hz tolerance on a 100 Hz signal. |
+| Absorption loss | ✅ Real, but uses a **constant dB/km coefficient** that does not vary with frequency. Real seawater absorption is strongly frequency-dependent; you must pass an appropriate `absorption_db_km` for your conditions. |
+| `SOUND_SPEED_AIR` (343 m/s) | ✅ Defined in `sonar.py`, but **not exported** by `__init__.py` — import it from `sonar_vision.sonar` if you need it. |
+| `sim_pipeline` sub-package | See below. |
+
+### 🔮 Aspirational / later phase
+
+| Claimed direction | Status |
+|-------------------|--------|
+| `sim_pipeline` — AUV fleet simulation, mission planning, physics | A nested sub-package exists at `sonar-vision/packages/pipeline/sim_pipeline/` with its own `pyproject.toml` and tests, but its tests **cannot be collected** (the import path `from sim_pipeline import …` fails unless the sub-package is installed separately). `AUVFleetSimulator.run_for()` is a no-op stub (`pass`); `FluxPhysics` is an empty class (`pass`). The CHANGELOG notes it was "never actually published" to PyPI. Treat it as scaffolding, not a working feature. |
+| Kalman/particle-filter tracking | Not implemented. The tracker is constant-velocity only. (Documented honestly in `LOW_LEVEL.md`.) |
+| Multi-beam / phased-array beamforming | Not implemented. Single-beam model only. |
 
 ## Testing
 
